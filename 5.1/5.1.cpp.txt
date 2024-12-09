@@ -1,0 +1,21 @@
+#include <iostream>
+#include "functions.h"
+
+int main() {
+    double x;
+    double epsilon = 1e-6;
+    int terms;
+
+    std::cout << "Enter value of x (0 < x <= 1): ";
+    std::cin >> x;
+
+    if (x <= 0 || x > 1) {
+        std::cerr << "Error \n";
+        return 1;
+    }
+
+    double result = calculate_sum(x, epsilon, terms);
+
+    std::cout << "Result: " << result << std::endl;
+    std::cout << "Count of summands: " << terms << std::endl;
+}
