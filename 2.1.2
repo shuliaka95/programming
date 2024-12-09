@@ -1,0 +1,58 @@
+#include <iostream>
+#include <cmath>
+
+int main() {
+    setlocale(LC_ALL, "Rus");
+    double number; // Вещественное число
+    int k, n;      // Номер цифры и количество цифр дробной части для суммирования
+    std::cout << "Введите положительное вещественное число: ";
+    std::cin >> number;
+    std::cout << "Введите номер цифры дробной части (k): ";
+    std::cin >> k;
+    std::cout << "Введите количество цифр дробной части для суммирования (n): ";
+    std::cin >> n;
+
+    if (number < 0 || k <= 0 || n <= 0) {
+        std::cout << "Ошибка: число должно быть положительным, а k и n — натуральными!" << std::endl;
+        return 1;
+    }
+
+    // Выделение дробной части числа
+    double fractional_part = number - static_cast<int>(number);
+    if (fractional_part == 0) {
+        std::cout << "У числа нет дробной части." << std::endl;
+        return 1;
+    }
+
+    int current_digit = 0; // Переменная для текущей цифры дробной части
+    int sum = 0;           // Сумма первых n цифр дробной части
+    int k_digit = -1;      // k-ая цифра дробной части
+    bool k_digit_found = false;
+
+    for (int i = 1; i <= std::max(k, n); ++i) {
+        fractional_part *= 10;                    // Сдвигаем следующую цифру в целую часть
+        current_digit = static_cast<int>(fractional_part); // Извлекаем текущую цифру
+        fractional_part -= current_digit;         // Убираем извлеченную цифру из дробной части
+
+        // Если достигли k-ой цифры, сохраняем её
+        if (i == k) {
+            k_digit = current_digit;
+            k_digit_found = true;
+        }
+
+        // Если сумма первых n цифр еще не завершена, добавляем текущую цифру
+        if (i <= n) {
+            sum += current_digit;
+        }
+    }
+
+    if (!k_digit_found) {
+        std::cout << "Ошибка: дробная часть не содержит k-ой цифры." << std::endl;
+    }
+    else if (k_digit == sum) {
+        std::cout << "k-ая цифра дробной части равна сумме первых n цифр дробной части." << std::endl;
+    }
+    else {
+        std::cout << "k-ая цифра дробной части НЕ равна сумме первых n цифр дробной части." << std::endl;
+    }
+}
