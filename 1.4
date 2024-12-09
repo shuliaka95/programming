@@ -1,0 +1,47 @@
+#include <iostream>
+#include <cmath>
+
+int main() {
+    setlocale(LC_ALL,"Rus");
+    int rook_x, rook_y;   // Координаты ладьи
+    int bishop_x, bishop_y; // Координаты слона
+
+    std::cout << "Введите координаты ладьи (x, y): ";
+    std::cin >> rook_x >> rook_y;
+
+    std::cout << "Введите координаты слона (x, y): ";
+    std::cin >> bishop_x >> bishop_y;
+
+    bool rook_threatens_bishop = (rook_x == bishop_x || rook_y == bishop_y); // Угроза от ладьи
+    bool bishop_threatens_rook = (std::abs(bishop_x - rook_x) == std::abs(bishop_y - rook_y)); // Угроза от слона
+
+    // Проверка угрозы
+    if (rook_threatens_bishop) {
+        std::cout << "Ладья угрожает слону." << std::endl;
+    }
+    else {
+        std::cout << "Ладья не угрожает слону." << std::endl;
+    }
+
+    if (bishop_threatens_rook) {
+        std::cout << "Слон угрожает ладье." << std::endl;
+    }
+    else {
+        std::cout << "Слон не угрожает ладье." << std::endl;
+
+        // Попытка найти ход для угрозы
+        int delta_x = rook_x > bishop_x ? 1 : -1; // Направление движения слона по x
+        int delta_y = rook_y > bishop_y ? 1 : -1; // Направление движения слона по y
+
+        int new_bishop_x = bishop_x + delta_x;
+        int new_bishop_y = bishop_y + delta_y;
+
+        if (new_bishop_x >= 1 && new_bishop_x <= 8 && new_bishop_y >= 1 && new_bishop_y <= 8 &&
+            std::abs(new_bishop_x - rook_x) == std::abs(new_bishop_y - rook_y)) {
+            std::cout << "Слон может угрожать ладье, сделав ход на (" << new_bishop_x << ", " << new_bishop_y << ")." << std::endl;
+        }
+        else {
+            std::cout << "Слон не может угрожать ладье ни за один ход." << std::endl;
+        }
+    }
+}
