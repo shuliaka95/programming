@@ -1,0 +1,36 @@
+#include <iostream>
+#include <cmath>
+
+int main() {
+    double x0 = -2.0, xn = 2.0, dx = 0.2; // Заданные значения
+    double epsilon = 1e-6;                // Точность
+    double x = x0;                        // Начальное значение x
+
+    std::cout << "x\tApproximation\tBuilt-in\tTerms\n";
+
+    while (x <= xn + dx / 2) { // Цикл по x с шагом dx
+        double current_term = 1.0 / x; // Первый член ряда
+        double y = current_term;      // Значение функции (приближение)
+        int k = 1;                    // Счетчик итераций (степень)
+        double factorial = 1.0;       // Для вычисления факториала
+        int terms = 1;                // Количество использованных слагаемых
+
+        // Итерационное добавление членов ряда
+        while (std::fabs(current_term) > epsilon) {
+            factorial *= k; // Факториал k!
+            current_term = std::pow(-1, k) * std::pow(x, k) / factorial; // Текущий член ряда
+            y += current_term; // Добавление текущего члена к сумме
+            k++;
+            terms++;
+        }
+
+        // Вычисление точного значения функции с использованием встроенной функции
+        double exact_value = std::exp(-x) - 1;
+
+        // Вывод результатов в текущей точке
+        std::cout << x << "\t" << y << "\t" << exact_value << "\t" << terms << std::endl;
+
+        // Увеличиваем x на шаг
+        x += dx;
+    }
+}
