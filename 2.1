@@ -1,0 +1,30 @@
+#include <iostream>
+
+int main() {
+    setlocale(LC_ALL,"Rus");
+    unsigned int n;
+    std::cout << "Введите натуральное число: ";
+    std::cin >> n;
+
+    bool all_unique = true; // Флаг, указывающий, все ли цифры уникальны
+    int digits_count[10] = { 0 }; // Массив для подсчета встречающихся цифр (0-9)
+
+    int temp = n; // Копия числа для анализа
+
+    while (temp > 0) {
+        int digit = temp % 10; // Извлекаем последнюю цифру
+        digits_count[digit]++; // Увеличиваем счетчик для этой цифры
+        if (digits_count[digit] > 1) { // Если цифра уже встречалась
+            all_unique = false;
+            break;
+        }
+        temp /= 10; // Убираем последнюю цифру
+    }
+
+    if (all_unique) {
+        std::cout << "Все цифры числа различны." << std::endl;
+    }
+    else {
+        std::cout << "Число содержит повторяющиеся цифры." << std::endl;
+    }
+}
