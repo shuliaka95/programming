@@ -1,0 +1,35 @@
+#include <iostream>
+
+int main() {
+    int num;
+    std::cin >> num;
+
+    // Поиск простых чисел-близнецов
+    for (int i = num; i <= 2 * num - 2; i++) {
+        bool is_prime = true;
+        if (i < 2) is_prime = false;  // Числа меньше 2 не простые
+
+        // Проверка простоты числа
+        for (int j = 2; j * j <= i; j++) {
+            if (i % j == 0) {
+                is_prime = false;
+                break;
+            }
+        }
+
+        // Проверка для числа i+2
+        bool is_prime_next = true;
+        if (i + 2 < 2) is_prime_next = false;
+        for (int j = 2; j * j <= i + 2; j++) {
+            if ((i + 2) % j == 0) {
+                is_prime_next = false;
+                break;
+            }
+        }
+
+        // Если оба числа простые, выводим их
+        if (is_prime && is_prime_next) {
+            std::cout << i << " " << i + 2 << std::endl;
+        }
+    }
+}
