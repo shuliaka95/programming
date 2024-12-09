@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cmath>
+
+int main() {
+    double input_number;
+    std::cout << "Enter a decimal number: ";
+    std::cin >> input_number;
+
+    // Константа для разрядности числа
+    const int BIT_COUNT = 32;
+
+    // Разделяем целую и дробную части
+    int whole_part = static_cast<int>(input_number);
+    double fractional_part = std::fabs(input_number) - std::abs(whole_part);
+
+    // Массив для хранения двоичной целой части
+    char binary_whole_part[BIT_COUNT + 1]; // +1 для '\0'
+    binary_whole_part[BIT_COUNT] = '\0';
+
+    // Обрабатываем целую часть числа
+    int index = BIT_COUNT - 1;
+    int abs_whole_part = std::abs(whole_part);
+
+    for (int i = 0; i < BIT_COUNT; ++i) {
+        binary_whole_part[index--] = (abs_whole_part % 2 == 0) ? '0' : '1';
+        abs_whole_part /= 2;
+    }
+
+    // Если число отрицательное, преобразуем в дополнительный код
+    if (whole_part < 0) {
+        // Инвертируем биты
+        for (int i = 0; i < BIT_COUNT; ++i) {
+            binary_whole_part[i] = (binary_whole_part[i] == '0') ? '1' : '0';
+        }
+
+        // Добавляем единицу
+        for (int i = BIT_COUNT - 1; i >= 0; --i) {
+            if (binary_whole_part[i] == '0') {
+                binary_whole_part[i] = '1';
+                break;
+            }
+            else {
+                binary_whole_part[i] = '0';
+            }
+        }
+    }
+
+    // Убираем ведущие нули для положительных чисел
+    char* trimmed_binary_whole_part = binary_whole_part;
+    if (whole_part >= 0) {
+        while (*trimmed_binary_whole_part == '0' && *(trimmed_binary_whole_part + 1) != '\0') {
+            ++trimmed_binary_whole_part;
+        }
+    }
+
+    // Массив для дробной части
+    char binary_fractional_part[12]; // "." + 10 знаков после точки + '\0'
+    binary_fractional_part[0] = '.';
+    int precision = 10; // Количество знаков после запятой
+    int fractional_index = 1;
+
+    while (fractional_part > 0 && precision > 0) {
+        fractional_part *= 2;
+        if (fractional_part >= 1) {
+            binary_fractional_part[fractional_index++] = '1';
+            fractional_part -= 1;
+        }
+        else {
+            binary_fractional_part[fractional_index++] = '0';
+        }
+        precision--;
+    }
+    binary_fractional_part[fractional_index] = '\0';
+
+    // Вывод результата
+    std::cout << "Binary representation: ";
+    std::cout << trimmed_binary_whole_part << binary_fractional_part << "\n";
+}
